@@ -1,28 +1,25 @@
-Orthogonal & Sparse Autoencoder Pretraining
+# transient_localisation
 
-This project implements a pipeline that:
-1. Transforms simulation CSV files into a dataset containing multiple harmonic orders.
-2. Optionally applies PCA to reduce dimensionality.
-3. Pretrains a custom autoencoder with an orthogonal & L1 regularized bottleneck layer.
+**Transient Localisation** is a machine learning project focused on detecting and localizing failures in power systems by analyzing transient harmonic responses. This repository implements several deep neural network approaches to identify failures by evaluating the relative importance of different harmonic orders.
 
+It is going to be published during the SDEWES '25 conference as an archival paper.
 
-1. Create a virtual environment and install the requirements:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # Linux/MacOS
-    venv\Scripts\activate     # Windows
-    pip install -r requirements.txt
-    ```
+## Overview
 
-2. Run the main script:
-    ```bash
-    python main.py
-    ```
+Modern power systems and grid-connected electronics can exhibit subtle changes in harmonic content when faults occur. By analyzing transient behaviors—especially in the harmonics—this project aims to identify failures locations even in scenarios with limited observation windows. 
 
-## Functionality
+## Key Features
 
-- **Data Transformation:** See `src/data/transform.py` and `src/data/dataset.py`
-- **PCA Pretraining:** See `src/models/pca_pretrain.py`
-- **Autoencoder Pretraining:** See `src/models/autoencoder.py`
-- **Custom Regularizer:** See `src/models/custom_regularizers.py`
+- **Harmonic Failure Analysis:**  
+  Evaluates multiple harmonic orders (from 50Hz to 750Hz) to determine which are most effective for fault localization.
 
+- **Deep Neural Network:**  
+  Builds and trains specialised neural networks to classify failure conditions based on transient harmonic data.
+
+- **Data Handling and Visualization:**  
+  Includes modules for loading and preprocessing transient harmonic datasets, as well as visualising the results.
+
+### Create a virtual environment and install the requirements:
+```bash
+pip install -r requirements.txt
+```

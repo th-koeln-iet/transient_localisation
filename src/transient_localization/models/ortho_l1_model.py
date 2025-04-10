@@ -69,11 +69,11 @@ if __name__ == '__main__':
     from tensorflow.keras import optimizers
     import numpy as np
 
-    name = "full_training_150Hz_250Hz"
-    x_t, y_train = load_dataset("./train_data_350Hz/")
+    name = "model_ort_l1_150Hz_0_-1"
+    x_t, y_train = load_dataset("./train_data_150Hz/")
     print(x_t.shape)
     num_samples = x_t.shape[0]
-    x_train = x_t[:, [2, 4], :, :]  # Select third and fifth harmonic
+    x_train = x_t[:, [0, -1], :, :]  # Select third and fifth harmonic
     x_train = x_train.reshape((num_samples, -1))
     model = build_model(x_train.shape[1], 44 + 1)
     batch_size = np.ceil(float(x_t.shape[0]) / 1)
