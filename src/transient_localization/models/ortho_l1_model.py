@@ -69,11 +69,11 @@ if __name__ == '__main__':
     from tensorflow.keras import optimizers
     import numpy as np
 
-    name = "model_ort_l1_150Hz_0_-1"
-    x_t, y_train = load_dataset("./train_data_150Hz/")
+    name = "model_ort_l1_250Hz_0_-1"
+    x_t, y_train = load_dataset("./train_data_250Hz/")
     print(x_t.shape)
     num_samples = x_t.shape[0]
-    x_train = x_t[:, [0, -1], :, :]  # Select third and fifth harmonic
+    x_train = x_t[:, [0, -1], :, :]  # Select first and fifth harmonic
     x_train = x_train.reshape((num_samples, -1))
     model = build_model(x_train.shape[1], 44 + 1)
     batch_size = np.ceil(float(x_t.shape[0]) / 1)
@@ -86,11 +86,11 @@ if __name__ == '__main__':
                                           save_weights_only=True,
                                           save_best_only=True,
                                           initial_value_threshold=0.0)
-    csv_logger = CSVLogger(f'./logs/{name}.log')
+    csv_logger = CSVLogger(f'./logs/{name}.log', append=True)
     schedule = SGDRScheduler(min_lr=1e-8,
                              max_lr=1e-4,
                              steps_per_epoch=np.ceil(len(x_train * 0.9) / batch_size),
-                             lr_decay=0.8,
+                             lr_decay=0.9,
                              cycle_length=1000,
                              mult_factor=1.5)
 
@@ -105,4 +105,4 @@ if __name__ == '__main__':
                       batch_size=int(batch_size),
                       validation_split=0.1,
                       epochs=1000000,
-                      callbacks=[chp, schedule])
+                      callbacks=[chp, schedule, csv_logger])

@@ -1,15 +1,26 @@
+import os
+import glob
+import re
+import pandas as pd
+import numpy as np
+import matplotlib as mpl
+mpl.use('TkAgg')
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 from src.transient_localization.data_handling.dataset import load_dataset
 from keras import metrics
 from src.transient_localization.utils.sgdr_scheduler import SGDRScheduler
 from tensorflow.keras import optimizers
 from src.transient_localization.models.dnn import build_model
 from keras.callbacks import CSVLogger
-import os
-import glob
-import re
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+
+
+sns.set_context("paper", font_scale=1.5, rc={"lines.linewidth": 2.5})
+sns.set_style("whitegrid")
+mpl.rcParams['font.family'] = 'serif'
+mpl.rcParams['pdf.fonttype'] = 42
+mpl.rcParams['ps.fonttype'] = 42
 
 
 def evaluate_harmonics_for_deep_learning():
@@ -103,50 +114,52 @@ def plot_training_logs(logs_dir='./logs/'):
     print("Summary of best validation metrics by harmonic:")
     print(summary_df)
 
+    fig1, ax1 = plt.subplots(figsize=(10, 6), dpi=300)
     bar_width = 40
-
-    plt.figure()
-    plt.bar(summary_df['harmonic'], summary_df['best_val_loss'], width=bar_width, align='center')
-    plt.xlabel("Harmonic (Hz)")
-    plt.ylabel("Loss")
-    plt.title("Best Validation Loss vs. Harmonic")
-    plt.xticks(summary_df['harmonic'])
-    plt.grid(axis='y')
+    ax1.bar(summary_df['harmonic'], summary_df['best_val_loss'], width=bar_width, align='center', color=sns.color_palette("muted")[0])
+    ax1.set_xlabel("Harmonic (Hz)", fontsize=16)
+    ax1.set_ylabel("Loss", fontsize=16)
+    ax1.set_title("Best Validation Loss vs. Harmonic", fontsize=18)
+    ax1.set_xticks(summary_df['harmonic'])
+    ax1.grid(axis='y')
     plt.tight_layout()
+    fig1.savefig("best_val_loss.png", format="png", dpi=300)
     plt.show()
 
-    plt.figure()
-    plt.bar(summary_df['harmonic'], summary_df['best_val_accuracy'], width=bar_width, align='center')
-    plt.xlabel("Harmonic (Hz)")
-    plt.ylabel("Accuracy")
-    plt.title("Best Validation Accuracy vs. Harmonic")
-    plt.xticks(summary_df['harmonic'])
-    plt.grid(axis='y')
+    fig2, ax2 = plt.subplots(figsize=(10, 6), dpi=300)
+    ax2.bar(summary_df['harmonic'], summary_df['best_val_accuracy'], width=bar_width, align='center', color=sns.color_palette("muted")[1])
+    ax2.set_xlabel("Harmonic (Hz)", fontsize=16)
+    ax2.set_ylabel("Accuracy", fontsize=16)
+    ax2.set_title("Best Validation Accuracy vs. Harmonic", fontsize=18)
+    ax2.set_xticks(summary_df['harmonic'])
+    ax2.grid(axis='y')
     plt.tight_layout()
+    fig2.savefig("best_val_accuracy.png", format="png", dpi=300)
     plt.show()
 
-    plt.figure()
-    plt.bar(summary_df['harmonic'], summary_df['best_val_TopK3'], width=bar_width, align='center')
-    plt.xlabel("Harmonic (Hz)")
-    plt.ylabel("Top-3 Accuracy")
-    plt.title("Best Validation Top-3 Accuracy vs. Harmonic")
-    plt.xticks(summary_df['harmonic'])
-    plt.grid(axis='y')
+    fig3, ax3 = plt.subplots(figsize=(10, 6), dpi=300)
+    ax3.bar(summary_df['harmonic'], summary_df['best_val_TopK3'], width=bar_width, align='center', color=sns.color_palette("muted")[2])
+    ax3.set_xlabel("Harmonic (Hz)", fontsize=16)
+    ax3.set_ylabel("Top-3 Accuracy", fontsize=16)
+    ax3.set_title("Best Validation Top-3 Accuracy vs. Harmonic", fontsize=18)
+    ax3.set_xticks(summary_df['harmonic'])
+    ax3.grid(axis='y')
     plt.tight_layout()
+    fig3.savefig("best_val_TopK3.png", format="png", dpi=300)
     plt.show()
 
-    plt.figure()
-    plt.bar(summary_df['harmonic'], summary_df['best_val_TopK5'], width=bar_width, align='center')
-    plt.xlabel("Harmonic (Hz)")
-    plt.ylabel("Top-5 Accuracy")
-    plt.title("Best Validation Top-5 Accuracy vs. Harmonic")
-    plt.xticks(summary_df['harmonic'])
-    plt.grid(axis='y')
+    fig4, ax4 = plt.subplots(figsize=(10, 6), dpi=300)
+    ax4.bar(summary_df['harmonic'], summary_df['best_val_TopK5'], width=bar_width, align='center', color=sns.color_palette("muted")[3])
+    ax4.set_xlabel("Harmonic (Hz)", fontsize=16)
+    ax4.set_ylabel("Top-5 Accuracy", fontsize=16)
+    ax4.set_title("Best Validation Top-5 Accuracy vs. Harmonic", fontsize=18)
+    ax4.set_xticks(summary_df['harmonic'])
+    ax4.grid(axis='y')
     plt.tight_layout()
+    fig4.savefig("best_val_TopK5.png", format="png", dpi=300)
     plt.show()
 
 
 if __name__ == '__main__':
-    evaluate_harmonics_for_deep_learning()
+    # evaluate_harmonics_for_deep_learning()
     plot_training_logs()
-
